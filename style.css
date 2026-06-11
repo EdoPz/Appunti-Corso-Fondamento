@@ -1,0 +1,607 @@
+/* STYLE.CSS — Custom Styles, Animations and Typographic Resets */
+
+/* Custom Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #475569;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Micro-animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleUp {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.40s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-up {
+    animation: scaleUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ==========================================================================
+   READER TYPOGRAPHY & RESET SYSTEM (Compact Layout)
+   Configures a dense, highly-readable layout for intensive studying.
+   ========================================================================== */
+.reader-typography {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    font-size: var(--reader-font-size, 17px);
+    line-height: 1.75; /* Comfortable reading rhythm */
+    letter-spacing: 0.003em;
+    color: currentColor;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* Tighter section flow */
+.reader-typography section {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin-bottom: 1.5rem !important; /* Reduced from 3rem */
+}
+
+/* Divider separator between chapters/sections with reduced space */
+.reader-typography section:not(:last-child) {
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+    padding-bottom: 1rem !important; /* Reduced from 2.5rem */
+}
+.dark .reader-typography section:not(:last-child) {
+    border-bottom: 1px solid rgba(51, 65, 85, 0.4) !important;
+}
+.theme-sepia .reader-typography section:not(:last-child) {
+    border-bottom: 1px solid rgba(235, 197, 153, 0.5) !important;
+}
+
+/* Make standard text components ignore inline small Tailwind sizes */
+.reader-typography p,
+.reader-typography li,
+.reader-typography td,
+.reader-typography th,
+.reader-typography span:not(.bible-citation):not(.font-bold):not(.font-semibold),
+.reader-typography div:not(.p-4):not(.p-3):not(.grid):not(.flex) {
+    font-size: inherit !important;
+}
+
+/* Standardize header levels (H2) - Tighter margins */
+.reader-typography h2 {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 1.3em !important;
+    font-weight: 700 !important;
+    margin-top: 0.5em !important;
+    margin-bottom: 0.5em !important; /* Reduced from 1em */
+    line-height: 1.3 !important;
+    border-left: 4px solid #4f46e5 !important;
+    padding-left: 0.6rem !important;
+    color: inherit !important;
+}
+.dark .reader-typography h2 {
+    border-left-color: #818cf8 !important;
+}
+.theme-sepia .reader-typography h2 {
+    border-left-color: #b45309 !important;
+}
+
+/* Headings H3/H4 inside sections */
+.reader-typography h3,
+.reader-typography strong.block {
+    font-family: 'Outfit', sans-serif !important;
+    font-size: 1.05em !important;
+    font-weight: 700 !important;
+    margin-top: 0.75em !important; /* Reduced from 1.25em */
+    margin-bottom: 0.35em !important;
+    color: inherit !important;
+}
+
+/* Compact callouts, tables, checklists */
+.reader-typography .p-4,
+.reader-typography .p-3,
+.reader-typography .bg-stone-50,
+.reader-typography .bg-slate-50 {
+    border-radius: 0.75rem !important;
+    padding: 0.75rem 1rem !important; /* Reduced padding */
+    margin-top: 0.75rem !important; /* Reduced margin */
+    margin-bottom: 0.75rem !important;
+    background-color: rgba(248, 250, 252, 0.6) !important;
+    border: 1px solid rgba(226, 232, 240, 0.8) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.01) !important;
+}
+.dark .reader-typography .p-4,
+.dark .reader-typography .p-3,
+.dark .reader-typography .bg-stone-50,
+.dark .reader-typography .bg-slate-50 {
+    background-color: rgba(30, 41, 59, 0.4) !important;
+    border: 1px solid rgba(71, 85, 105, 0.3) !important;
+}
+.theme-sepia .reader-typography .p-4,
+.theme-sepia .reader-typography .p-3,
+.theme-sepia .bg-stone-50,
+.theme-sepia .bg-slate-50 {
+    background-color: rgba(245, 226, 204, 0.3) !important;
+    border: 1px solid rgba(235, 197, 153, 0.6) !important;
+}
+
+/* Force callout elements to inherit theme text color */
+.reader-typography .p-4 *,
+.reader-typography .p-3 * {
+    color: inherit !important;
+}
+
+/* Adjust colors and transparency for warning/success/error alerts */
+/* Emerald/Positive Alerts */
+.reader-typography .bg-emerald-50\/40,
+.reader-typography .bg-emerald-50,
+.reader-typography .bg-emerald-50\/50,
+.reader-typography .border-emerald-100 {
+    background-color: rgba(209, 250, 229, 0.25) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+}
+.dark .reader-typography .bg-emerald-50\/40,
+.dark .reader-typography .bg-emerald-50 {
+    background-color: rgba(6, 78, 59, 0.2) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Red/Negative Alerts */
+.reader-typography .bg-red-50\/40,
+.reader-typography .bg-red-50,
+.reader-typography .bg-red-50\/50,
+.reader-typography .bg-rose-50\/40,
+.reader-typography .border-red-100 {
+    background-color: rgba(254, 226, 226, 0.25) !important;
+    border-color: rgba(239, 68, 68, 0.18) !important;
+}
+.dark .reader-typography .bg-red-50\/40,
+.dark .reader-typography .bg-red-50 {
+    background-color: rgba(153, 27, 27, 0.2) !important;
+    border-color: rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Amber/Notice Alerts */
+.reader-typography .bg-amber-50\/40,
+.reader-typography .bg-amber-50,
+.reader-typography .bg-amber-50\/50,
+.reader-typography .border-amber-100,
+.reader-typography .border-amber-200 {
+    background-color: rgba(254, 243, 199, 0.25) !important;
+    border-color: rgba(245, 158, 11, 0.18) !important;
+}
+.dark .reader-typography .bg-amber-50\/40,
+.dark .reader-typography .bg-amber-50 {
+    background-color: rgba(120, 53, 4, 0.2) !important;
+    border-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+/* Blue/Neutral Info Alerts */
+.reader-typography .bg-blue-50\/50,
+.reader-typography .bg-blue-50,
+.reader-typography .bg-blue-50\/40,
+.reader-typography .border-blue-100 {
+    background-color: rgba(219, 234, 254, 0.25) !important;
+    border-color: rgba(59, 130, 246, 0.18) !important;
+}
+.dark .reader-typography .bg-blue-50\/50,
+.dark .reader-typography .bg-blue-50 {
+    background-color: rgba(30, 58, 138, 0.2) !important;
+    border-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Compact Lists */
+.reader-typography ul, 
+.reader-typography ol {
+    margin-top: 0.25em !important;
+    margin-bottom: 0.75em !important; /* Reduced from 1.25em */
+    padding-left: 1.5em !important;
+}
+.reader-typography li {
+    margin-bottom: 0.3em !important; /* Reduced from 0.5em */
+}
+
+/* Special Bible Verses Citations Styling */
+.bible-citation {
+    font-style: italic;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-bottom: 1px dashed currentColor;
+}
+
+/* Dynamic Active Bible Highlights Mode */
+.bible-highlights-active .bible-citation {
+    background-color: rgba(245, 158, 11, 0.15); /* Soft Amber bg */
+    color: #d97706 !important;
+    padding: 0 4px;
+    border-radius: 4px;
+    border-bottom-style: solid;
+    box-shadow: 0 1px 2px rgba(217, 119, 6, 0.05);
+}
+
+.dark.bible-highlights-active .bible-citation {
+    background-color: rgba(245, 158, 11, 0.25);
+    color: #fbbf24 !important;
+}
+
+.theme-sepia.bible-highlights-active .bible-citation {
+    background-color: rgba(217, 119, 6, 0.18);
+    color: #b45309 !important;
+}
+
+.bible-citation:hover {
+    background-color: rgba(79, 70, 229, 0.1) !important;
+    color: #4f46e5 !important;
+    border-bottom-style: solid;
+}
+.dark .bible-citation:hover {
+    background-color: rgba(99, 102, 241, 0.2) !important;
+    color: #818cf8 !important;
+}
+
+/* Customized Checkbox effect */
+#lesson-completed-checkbox:checked + #custom-checkbox {
+    background-color: #10b981;
+    border-color: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+#lesson-completed-checkbox:checked + #custom-checkbox i {
+    transform: scale(1);
+}
+
+/* ==========================================================================
+   SEPIA THEME OVERRIDES
+   ========================================================================== */
+body.theme-sepia {
+    background-color: #fbf0e3 !important;
+    color: #433422 !important;
+}
+
+body.theme-sepia aside {
+    background-color: #f5e2cc !important;
+    border-color: #ebc599 !important;
+}
+
+body.theme-sepia aside * {
+    border-color: #ebc599 !important;
+}
+
+body.theme-sepia header {
+    background-color: rgba(251, 240, 227, 0.8) !important;
+    border-color: #ebc599 !important;
+}
+
+body.theme-sepia #reader-content-frame,
+body.theme-sepia textarea,
+body.theme-sepia #search-input,
+body.theme-sepia .bg-white,
+body.theme-sepia section,
+body.theme-sepia #quiz-question-container,
+body.theme-sepia #quiz-results-container,
+body.theme-sepia .stats-card {
+    background-color: #fdf8f2 !important;
+    color: #433422 !important;
+    border-color: #ebc599 !important;
+}
+
+body.theme-sepia h1,
+body.theme-sepia h2,
+body.theme-sepia h3,
+body.theme-sepia h4,
+body.theme-sepia strong,
+body.theme-sepia .text-slate-900,
+body.theme-sepia .text-indigo-950,
+body.theme-sepia .text-slate-950 {
+    color: #2b2013 !important;
+}
+
+body.theme-sepia p,
+body.theme-sepia span,
+body.theme-sepia li,
+body.theme-sepia .text-slate-700,
+body.theme-sepia .text-slate-600,
+body.theme-sepia .text-stone-700,
+body.theme-sepia .text-stone-600 {
+    color: #4f3f2d !important;
+}
+
+body.theme-sepia .text-slate-400,
+body.theme-sepia .text-slate-500 {
+    color: #8c7862 !important;
+}
+
+body.theme-sepia .bg-slate-50,
+body.theme-sepia .bg-slate-100,
+body.theme-sepia .bg-stone-50,
+body.theme-sepia .bg-slate-50\/50,
+body.theme-sepia .bg-indigo-50,
+body.theme-sepia .bg-amber-50,
+body.theme-sepia .bg-emerald-50,
+body.theme-sepia .bg-amber-50\/40,
+body.theme-sepia .bg-slate-50\/40,
+body.theme-sepia .bg-stone-50\/50,
+body.theme-sepia .bg-emerald-50\/40,
+body.theme-sepia .bg-red-50\/40,
+body.theme-sepia .bg-blue-50\/50,
+body.theme-sepia .bg-blue-50\/40 {
+    background-color: #f5e2cc !important;
+    border-color: #e2cca6 !important;
+}
+
+body.theme-sepia .hover\:bg-slate-50:hover,
+body.theme-sepia .hover\:bg-slate-100:hover,
+body.theme-sepia .hover\:bg-slate-100\/80:hover {
+    background-color: #ebc599 !important;
+}
+
+body.theme-sepia .active-lesson-link {
+    background-color: #ddaa73 !important;
+    color: #2b2013 !important;
+    border-color: #b3844f !important;
+}
+
+body.theme-sepia select {
+    color: #433422 !important;
+}
+
+body.theme-sepia .border-slate-200,
+body.theme-sepia .border-stone-200,
+body.theme-sepia .border-slate-100,
+body.theme-sepia .border-indigo-200,
+body.theme-sepia .border-amber-200,
+body.theme-sepia .border-emerald-200,
+body.theme-sepia .border-amber-100 {
+    border-color: #ebc599 !important;
+}
+
+body.theme-sepia #lesson-completed-checkbox:not(:checked) + #custom-checkbox {
+    border-color: #8c7862 !important;
+    background-color: #fdf8f2 !important;
+}
+
+body.theme-sepia #notes-textarea {
+    border-color: #ebc599 !important;
+    background-color: #fdf8f2 !important;
+}
+
+body.theme-sepia #notes-textarea::placeholder {
+    color: #b5a28c !important;
+}
+
+/* ==========================================================================
+   LESSON CONTENT READABILITY FIXES
+   The lesson HTML ships hardcoded light-theme Tailwind text colors. Below we
+   remap them so the text stays legible on every theme surface and never
+   renders dark-on-dark or white-on-white.
+   ========================================================================== */
+
+/* --- 1. Dark-background cards: restore their dark surface + keep light text --
+   Some callouts (and even whole <section>s, e.g. bg-amber-950 text-stone-100)
+   are designed as dark accent cards. Two bugs hit them:
+   (a) the "section { background: transparent }" reset stripped their dark fill,
+       leaving light text on the white frame -> white-on-white;
+   (b) the generic "color: inherit" reset flipped their white text to dark.
+   Re-assert a real dark background, sensible padding, and light text so they
+   read correctly in light, dark AND sepia themes.                             */
+.reader-typography .bg-indigo-950 { background-color: #1e1b4b !important; }
+.reader-typography .bg-indigo-900 { background-color: #312e81 !important; }
+.reader-typography .bg-emerald-900 { background-color: #064e3b !important; }
+.reader-typography .bg-amber-950 { background-color: #451a03 !important; }
+.reader-typography .bg-amber-600 { background-color: #d97706 !important; }
+.reader-typography .bg-slate-900,
+.reader-typography .bg-slate-950 { background-color: #0f172a !important; }
+.reader-typography .bg-stone-900 { background-color: #1c1917 !important; }
+
+/* Dark cards that are full sections lost their padding to the section reset */
+.reader-typography section.bg-amber-950,
+.reader-typography section.bg-indigo-950,
+.reader-typography section.bg-emerald-900,
+.reader-typography section.bg-slate-900,
+.reader-typography section.bg-slate-950,
+.reader-typography section.bg-stone-900 {
+    padding: 1.25rem 1.5rem !important;
+    border-radius: 0.75rem !important;
+    border: none !important;
+}
+
+.reader-typography .bg-indigo-950,
+.reader-typography .bg-indigo-900,
+.reader-typography .bg-emerald-900,
+.reader-typography .bg-amber-950,
+.reader-typography .bg-amber-600,
+.reader-typography .bg-slate-900,
+.reader-typography .bg-slate-950,
+.reader-typography .bg-stone-900,
+.reader-typography .bg-indigo-950 *,
+.reader-typography .bg-indigo-900 *,
+.reader-typography .bg-emerald-900 *,
+.reader-typography .bg-amber-950 *,
+.reader-typography .bg-amber-600 *,
+.reader-typography .bg-slate-900 *,
+.reader-typography .bg-slate-950 *,
+.reader-typography .bg-stone-900 * {
+    color: #ffffff !important;
+}
+body.theme-sepia .reader-typography .bg-indigo-950,
+body.theme-sepia .reader-typography .bg-indigo-900,
+body.theme-sepia .reader-typography .bg-emerald-900,
+body.theme-sepia .reader-typography .bg-amber-950,
+body.theme-sepia .reader-typography .bg-amber-600,
+body.theme-sepia .reader-typography .bg-indigo-950 *,
+body.theme-sepia .reader-typography .bg-indigo-900 *,
+body.theme-sepia .reader-typography .bg-emerald-900 *,
+body.theme-sepia .reader-typography .bg-amber-950 *,
+body.theme-sepia .reader-typography .bg-amber-600 * {
+    color: #fdf8f2 !important;
+}
+
+/* --- 2. Dark theme: remap hardcoded dark text colors to light, readable ones */
+.dark .reader-typography {
+    color: #e2e8f0;
+}
+
+/* Light accent callout backgrounds not covered above -> dark translucent,
+   so the dark-text remap below never lands light-on-light. */
+.dark .reader-typography .bg-indigo-50,
+.dark .reader-typography .bg-orange-50,
+.dark .reader-typography .bg-green-50\/50,
+.dark .reader-typography .bg-rose-50\/20,
+.dark .reader-typography .bg-amber-50\/30,
+.dark .reader-typography .bg-emerald-50\/30,
+.dark .reader-typography .bg-slate-50\/50,
+.dark .reader-typography .bg-stone-50\/50 {
+    background-color: rgba(30, 41, 59, 0.45) !important;
+    border-color: rgba(71, 85, 105, 0.35) !important;
+}
+
+/* Neutral greys (used for headings / body / strong) -> light */
+.dark .reader-typography .text-slate-950,
+.dark .reader-typography .text-slate-900,
+.dark .reader-typography .text-slate-800,
+.dark .reader-typography .text-stone-950,
+.dark .reader-typography .text-stone-900,
+.dark .reader-typography .text-stone-800 {
+    color: #f1f5f9 !important;
+}
+.dark .reader-typography .text-slate-700,
+.dark .reader-typography .text-slate-600,
+.dark .reader-typography .text-stone-700,
+.dark .reader-typography .text-stone-600 {
+    color: #cbd5e1 !important;
+}
+.dark .reader-typography .text-slate-500,
+.dark .reader-typography .text-slate-400,
+.dark .reader-typography .text-stone-500 {
+    color: #94a3b8 !important;
+}
+
+/* Accent colors -> brighter accent variants that read on dark surfaces */
+.dark .reader-typography .text-blue-950,
+.dark .reader-typography .text-blue-900,
+.dark .reader-typography .text-blue-600 {
+    color: #93c5fd !important;
+}
+.dark .reader-typography .text-indigo-950,
+.dark .reader-typography .text-indigo-900 {
+    color: #a5b4fc !important;
+}
+.dark .reader-typography .text-emerald-950,
+.dark .reader-typography .text-emerald-900,
+.dark .reader-typography .text-emerald-800,
+.dark .reader-typography .text-emerald-700,
+.dark .reader-typography .text-green-950 {
+    color: #6ee7b7 !important;
+}
+.dark .reader-typography .text-rose-950,
+.dark .reader-typography .text-rose-900,
+.dark .reader-typography .text-red-950,
+.dark .reader-typography .text-red-900,
+.dark .reader-typography .text-red-800,
+.dark .reader-typography .text-red-700 {
+    color: #fda4af !important;
+}
+.dark .reader-typography .text-amber-950,
+.dark .reader-typography .text-amber-900,
+.dark .reader-typography .text-amber-700,
+.dark .reader-typography .text-orange-950,
+.dark .reader-typography .text-orange-900 {
+    color: #fcd34d !important;
+}
+
+/* Slightly stronger Bible-citation contrast for legibility */
+.bible-citation {
+    border-bottom-color: rgba(79, 70, 229, 0.45);
+}
+.dark .bible-citation {
+    border-bottom-color: rgba(129, 140, 248, 0.5);
+}
+
+/* ==========================================================================
+   SECTION SIZE & STRUCTURE UNIFICATION
+   The source notes mix text-xs / text-sm / text-[11px] / text-[13px] and
+   varying paddings, radii and grid gaps from one section to the next.
+   Collapse everything into ONE consistent typographic + spacing scale so
+   every section looks identical in rhythm and size.
+   ========================================================================== */
+
+/* (a) TYPE SCALE — exactly three tiers everywhere ------------------------- */
+
+/* Tier 1: body / running text / table cells -> single base size.
+   NOTE: Tailwind's text-* utilities ALSO ship a fixed (absolute) line-height
+   (e.g. text-xs = 12px font / 16px leading). Once we enlarge the font to 1em
+   that bundled leading is too small and lines collide — so we must re-impose a
+   relative, font-scaled line-height here too. */
+.reader-typography .text-xs,
+.reader-typography .text-sm,
+.reader-typography .text-base,
+.reader-typography .text-\[10px\],
+.reader-typography .text-\[11px\],
+.reader-typography .text-\[13px\] {
+    font-size: 1em !important;
+    line-height: 1.7 !important;
+}
+
+/* Tier 2: eyebrow / uppercase labels -> single smaller size, everywhere */
+.reader-typography .uppercase {
+    font-size: 0.72em !important;
+    letter-spacing: 0.06em !important;
+    line-height: 1.4 !important;
+}
+
+/* Tier 3: headings — re-assert the scale (some carry text-sm/base/xs utils,
+   which would otherwise win on specificity and shrink/grow the heading). */
+.reader-typography h2,
+.reader-typography h2.text-xs,
+.reader-typography h2.text-sm,
+.reader-typography h2.text-base,
+.reader-typography h2.text-lg {
+    font-size: 1.3em !important;
+}
+/* Real subheadings (A. Osservazione, B. Interpretazione…) stay at h3 size.
+   Uppercase eyebrow-style h3 are treated as labels by the .uppercase rule. */
+.reader-typography h3:not(.uppercase) {
+    font-size: 1.08em !important;
+}
+
+/* (b) STRUCTURE — uniform spacing & shapes across sections ---------------- */
+
+/* One grid gap for every section's card grids */
+.reader-typography .grid {
+    gap: 0.75rem !important;
+}
+
+/* One corner radius for every inner card/box, whatever class it shipped with */
+.reader-typography .rounded,
+.reader-typography .rounded-md,
+.reader-typography .rounded-lg {
+    border-radius: 0.75rem !important;
+}
+
+/* Consistent vertical rhythm between stacked blocks (space-y-* varies a lot) */
+.reader-typography .space-y-2 > * + *,
+.reader-typography .space-y-3 > * + *,
+.reader-typography .space-y-4 > * + *,
+.reader-typography .space-y-6 > * + * {
+    margin-top: 0.75rem !important;
+}

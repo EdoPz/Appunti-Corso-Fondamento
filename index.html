@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corso del Fondamento — Scuola di Discepolato</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Outfit (Display/Headers), Lora (Serif Reader), Inter (Sans UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS Configuration for Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sepia: {
+                            50: '#fbf0e3',
+                            100: '#f5e2cc',
+                            200: '#ebc599',
+                            300: '#ddaa73',
+                            800: '#433422',
+                            900: '#2b2013',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Lora', 'serif'],
+                        display: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-200 antialiased min-h-screen transition-colors duration-300">
+
+    <div class="flex min-h-screen overflow-hidden">
+        
+        <!-- SIDEBAR (Desktop) / DRAWER (Mobile) -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+            <!-- Sidebar Header -->
+            <div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                <a href="#" onclick="showDashboard(event)" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-200 dark:shadow-none group-hover:scale-105 transition-transform">
+                        <i data-lucide="book-open" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-display font-bold text-lg leading-tight text-slate-950 dark:text-white">Corso Fondamento</h1>
+                        <span class="text-xs text-indigo-600 dark:text-indigo-400 font-medium tracking-wide uppercase">Discepolato</span>
+                    </div>
+                </a>
+                <button onclick="toggleSidebar()" class="md:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Stats/Progress Panel inside Sidebar -->
+            <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Progresso Studio</span>
+                    <span id="sidebar-progress-text" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">0%</span>
+                </div>
+                <div class="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                    <div id="sidebar-progress-bar" class="bg-indigo-600 dark:bg-indigo-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="p-4 border-b border-slate-200 dark:border-slate-800">
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                        <i data-lucide="search" class="w-4 h-4"></i>
+                    </span>
+                    <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Cerca negli appunti..." class="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 text-slate-900 dark:text-white transition-all">
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 overflow-y-auto p-4 space-y-1.5 scrollbar-thin">
+                <div class="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 mb-2">Capitoli</div>
+                <div id="lessons-list" class="space-y-1">
+                    <!-- Dynamic lesson navigation links -->
+                </div>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 flex items-center justify-between text-xs text-slate-400">
+                <span>Versione 2.0</span>
+                <a href="#" onclick="showDashboard(event)" class="text-indigo-600 dark:text-indigo-400 font-medium hover:underline flex items-center gap-1">
+                    <i data-lucide="home" class="w-3.5 h-3.5"></i> Dashboard
+                </a>
+            </div>
+        </aside>
+
+        <!-- Sidebar overlay for mobile -->
+        <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 z-30 bg-slate-900/40 dark:bg-slate-950/60 backdrop-blur-sm hidden md:hidden transition-opacity"></div>
+
+        <!-- MAIN CONTENT CONTAINER -->
+        <div class="flex-1 flex flex-col md:pl-72 min-w-0">
+            
+            <!-- HEADER / TOOLBAR -->
+            <header class="sticky top-0 z-20 h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 flex items-center justify-between transition-all">
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleSidebar()" class="md:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <!-- Current Section Title -->
+                    <span id="current-section-title" class="font-display font-bold text-slate-900 dark:text-white tracking-tight hidden sm:inline-block">Scuola di Discepolato</span>
+                </div>
+
+                <!-- Reading & UI Controls -->
+                <div class="flex items-center gap-1 sm:gap-2">
+                    
+                    <!-- Bible Highlights Toggle (only visible in reader mode) -->
+                    <button id="highlight-toggle" onclick="toggleBibleHighlights()" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center gap-1.5 text-xs font-semibold border border-transparent hover:border-slate-200 dark:hover:border-slate-700 hidden" title="Evidenzia Riferimenti Biblici">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+                        <span class="hidden md:inline">Evidenzia Bibbia</span>
+                    </button>
+
+                    <!-- Font Size Adjuster (only visible in reader mode) -->
+                    <div id="font-size-controls" class="relative hidden">
+                        <button onclick="toggleFontDropdown()" class="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-all border border-transparent hover:border-slate-200 dark:hover:border-slate-700" title="Dimensione Carattere">
+                            <i data-lucide="type" class="w-4 h-4"></i>
+                        </button>
+                        <div id="font-dropdown" class="absolute right-0 mt-2 w-32 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-lg p-2 flex flex-col gap-1 hidden">
+                            <button onclick="changeFontSize('small')" class="px-3 py-1.5 text-left text-xs font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">Piccolo</button>
+                            <button onclick="changeFontSize('medium')" class="px-3 py-1.5 text-left text-sm font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">Medio</button>
+                            <button onclick="changeFontSize('large')" class="px-3 py-1.5 text-left text-base font-medium rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 font-semibold">Grande</button>
+                        </div>
+                    </div>
+
+                    <!-- TTS Speech Reader Bar (only visible in reader mode) -->
+                    <div id="tts-controls" class="flex items-center gap-0.5 sm:gap-1 bg-slate-100 dark:bg-slate-800/80 px-2 py-1 rounded-xl hidden border border-slate-200/50 dark:border-slate-700/50">
+                        <button id="tts-play-btn" onclick="toggleTTS()" class="p-1 rounded-lg text-indigo-600 dark:text-indigo-400 hover:bg-white dark:hover:bg-slate-700 transition-colors" title="Leggi ad alta voce">
+                            <i data-lucide="play" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button id="tts-stop-btn" onclick="stopTTS()" class="p-1 rounded-lg text-slate-500 hover:bg-white dark:hover:bg-slate-700 transition-colors" title="Ferma lettura">
+                            <i data-lucide="square" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <select id="tts-speed" onchange="changeTTSSpeed(this.value)" class="bg-transparent border-none text-[10px] font-semibold text-slate-600 dark:text-slate-300 focus:ring-0 cursor-pointer pr-1">
+                            <option value="0.9">0.9x</option>
+                            <option value="1.0" selected>1.0x</option>
+                            <option value="1.1">1.1x</option>
+                            <option value="1.2">1.2x</option>
+                            <option value="1.3">1.3x</option>
+                        </select>
+                    </div>
+
+                    <!-- Theme Toggle Buttons (Light / Sepia / Dark) -->
+                    <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+                        <button onclick="setTheme('light')" class="theme-btn p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all" id="theme-btn-light" title="Tema Chiaro">
+                            <i data-lucide="sun" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="setTheme('sepia')" class="theme-btn p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all" id="theme-btn-sepia" title="Tema Sepia">
+                            <i data-lucide="book-open" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="setTheme('dark')" class="theme-btn p-1.5 rounded-lg text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all" id="theme-btn-dark" title="Tema Scuro">
+                            <i data-lucide="moon" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+
+                </div>
+            </header>
+
+            <!-- SCREEN WRAPPER / SCROLL CONTENT -->
+            <main class="flex-1 overflow-y-auto">
+                
+                <!-- VIEW 1: DASHBOARD -->
+                <div id="view-dashboard" class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 animate-fade-in">
+                    
+                    <!-- Welcome Hero Header -->
+                    <div class="relative overflow-hidden bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-950 rounded-3xl p-6 sm:p-8 lg:p-10 text-white shadow-xl">
+                        <!-- Background glow elements -->
+                        <div class="absolute -right-10 -top-10 w-48 h-48 bg-indigo-500/20 rounded-full blur-3xl"></div>
+                        <div class="absolute right-1/4 -bottom-10 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl"></div>
+                        
+                        <div class="relative z-10 max-w-2xl space-y-4">
+                            <div class="inline-flex items-center gap-2 bg-indigo-500/20 border border-indigo-500/30 px-3 py-1 rounded-full text-xs font-semibold text-indigo-300">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Scuola di Discepolato
+                            </div>
+                            <h2 class="font-display font-extrabold text-3xl sm:text-4xl lg:text-5xl leading-tight tracking-tight">
+                                Consolida le tue <span class="bg-gradient-to-r from-indigo-400 to-emerald-400 bg-clip-text text-transparent">Fondamenta</span> in Cristo
+                            </h2>
+                            <p class="text-sm sm:text-base text-slate-300 font-light leading-relaxed">
+                                Benvenuto nel portale di studio interattivo. Qui troverai tutti gli appunti e le sintesi per prepararti al meglio ai quiz del Corso del Fondamento. Traccia il tuo progresso, esercitati con i test dedicati e prendi appunti personalizzati.
+                            </p>
+                            <div class="pt-2 flex flex-wrap gap-3">
+                                <button onclick="startFirstUnread()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-indigo-700/30 active:scale-95 transition-all flex items-center gap-2">
+                                    <i data-lucide="play-circle" class="w-4 h-4"></i> Riprendi Studio
+                                </button>
+                                <button onclick="scrollToLessonsList()" class="bg-white/10 hover:bg-white/15 border border-white/20 text-white px-5 py-2.5 rounded-xl text-sm font-semibold active:scale-95 transition-all">
+                                    Esplora Dispense
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <!-- Stat card 1: Lessons Read -->
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                                <i data-lucide="check-square" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 dark:text-slate-500 font-medium block">Lezioni Completate</span>
+                                <span id="stats-lessons-read" class="text-xl sm:text-2xl font-bold font-display text-slate-900 dark:text-white">0 / 11</span>
+                            </div>
+                        </div>
+                        <!-- Stat card 2: Average Quiz Score -->
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                                <i data-lucide="award" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 dark:text-slate-500 font-medium block">Media Punteggio Quiz</span>
+                                <span id="stats-quiz-avg" class="text-xl sm:text-2xl font-bold font-display text-slate-900 dark:text-white">0%</span>
+                            </div>
+                        </div>
+                        <!-- Stat card 3: Time Spent/Estimated -->
+                        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-950/50 flex items-center justify-center text-amber-600 dark:text-amber-400">
+                                <i data-lucide="clock" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <span class="text-xs text-slate-400 dark:text-slate-500 font-medium block">Tempo Stimato Lettura</span>
+                                <span id="stats-time" class="text-xl sm:text-2xl font-bold font-display text-slate-900 dark:text-white">~ 2.5 ore</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lessons List Section -->
+                    <div id="lessons-grid-section" class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-display font-bold text-xl text-slate-900 dark:text-white tracking-tight">Capitoli del Corso</h3>
+                            <span class="text-xs text-slate-400 dark:text-slate-500 font-medium">Clicca su una lezione per iniziare a studiare</span>
+                        </div>
+
+                        <!-- Grid container for dynamically rendered lesson cards -->
+                        <div id="lessons-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <!-- Cards populated dynamically in app.js -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- VIEW 2: READER MODE -->
+                <div id="view-reader" class="hidden max-w-4xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 animate-fade-in">
+                    
+                    <!-- Back Button to Dashboard -->
+                    <div class="flex items-center justify-between">
+                        <button onclick="showDashboard(event)" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-sm font-semibold flex items-center gap-1.5 group">
+                            <i data-lucide="chevron-left" class="w-4 h-4 group-hover:-translate-x-0.5 transition-transform"></i> Torna alla Dashboard
+                        </button>
+                        <!-- Top mini status indicator -->
+                        <div class="flex items-center gap-2">
+                            <span id="reader-status-badge" class="px-2.5 py-1 text-xs font-semibold rounded-full bg-slate-100 dark:bg-slate-800">Non letto</span>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Header Banner for Current Lesson -->
+                    <div id="reader-header" class="rounded-3xl p-6 sm:p-8 text-white shadow-lg overflow-hidden relative">
+                        <div class="absolute inset-0 bg-slate-950/30 mix-blend-multiply"></div>
+                        <div class="relative z-10 space-y-3">
+                            <div id="reader-chapter-num" class="text-xs uppercase font-bold tracking-widest text-white/85">Lezione 01</div>
+                            <h2 id="reader-title" class="font-display font-extrabold text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-tight">Titolo della Lezione</h2>
+                            <p id="reader-subtitle" class="text-xs sm:text-sm text-white/80 font-light leading-relaxed max-w-3xl italic">Sotto-titolo sintetico della dispensa.</p>
+                        </div>
+                    </div>
+
+                    <!-- Main Reading Content Container -->
+                    <div id="reader-content-frame" class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm">
+                        <!-- Custom CSS rules in style.css will target the element inside this frame for font rendering -->
+                        <div id="reader-content-html" class="reader-typography max-w-none text-slate-800 dark:text-slate-200">
+                            <!-- HTML parsed content inserted here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Notepad and Study Tools Widget -->
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-150 dark:border-slate-800 pb-3">
+                            <h4 class="font-display font-bold text-base text-slate-900 dark:text-white flex items-center gap-2">
+                                <i data-lucide="edit-3" class="w-4 h-4 text-indigo-600 dark:text-indigo-400"></i> Note Personali di Studio
+                            </h4>
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider">Salvataggio Automatico</span>
+                        </div>
+                        <textarea id="notes-textarea" oninput="saveCurrentNote(this.value)" placeholder="Scrivi qui le tue riflessioni, note, domande o appunti per questa lezione... Saranno salvati automaticamente nel browser." class="w-full h-32 p-3 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 text-slate-900 dark:text-white transition-all resize-none"></textarea>
+                    </div>
+
+                    <!-- Footer Lesson Navigation & Completion Checkbox -->
+                    <div class="bg-slate-100 dark:bg-slate-900 rounded-3xl p-6 border border-slate-250 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <!-- Completion checkbox -->
+                        <label class="flex items-center gap-3 cursor-pointer group select-none">
+                            <div class="relative">
+                                <input type="checkbox" id="lesson-completed-checkbox" onchange="toggleCurrentLessonCompleted(this.checked)" class="sr-only">
+                                <div id="custom-checkbox" class="w-6 h-6 rounded-lg border-2 border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 flex items-center justify-center transition-all group-hover:border-indigo-500 dark:group-hover:border-indigo-400">
+                                    <i data-lucide="check" class="w-4 h-4 text-white scale-0 transition-transform"></i>
+                                </div>
+                            </div>
+                            <span class="text-sm font-semibold text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Segna come completato</span>
+                        </label>
+
+                        <!-- Actions -->
+                        <div class="flex items-center gap-3">
+                            <button id="reader-quiz-btn" onclick="startQuizMode()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg shadow-emerald-700/20 active:scale-95 transition-all flex items-center gap-2">
+                                <i data-lucide="award" class="w-4 h-4"></i> Fai il Quiz
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Previous/Next Chapter Navigation Buttons -->
+                    <div class="flex items-center justify-between pt-2">
+                        <button id="prev-lesson-btn" onclick="navigateToAdjacentLesson(-1)" class="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95 transition-all flex items-center gap-1.5">
+                            <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i> Lezione Precedente
+                        </button>
+                        <button id="next-lesson-btn" onclick="navigateToAdjacentLesson(1)" class="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95 transition-all flex items-center gap-1.5">
+                            Prossima Lezione <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- VIEW 3: QUIZ MODE -->
+                <div id="view-quiz" class="hidden max-w-2xl mx-auto p-4 sm:p-6 lg:p-8 space-y-8 animate-fade-in">
+                    
+                    <!-- Back Button out of Quiz -->
+                    <div class="flex items-center justify-between">
+                        <button id="exit-quiz-btn" onclick="exitQuiz()" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 text-sm font-semibold flex items-center gap-1.5 group">
+                            <i data-lucide="x" class="w-4 h-4 group-hover:rotate-90 transition-transform"></i> Esci dal Quiz
+                        </button>
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider">MODALITÀ QUIZ</div>
+                    </div>
+
+                    <!-- Quiz Card -->
+                    <div id="quiz-question-container" class="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm space-y-6">
+                        
+                        <!-- Question Header / Progress -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span id="quiz-progress-text" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-widest">DOMANDA 1 DI 5</span>
+                                <span id="quiz-score-badge" class="text-xs font-semibold text-slate-400">Punti: 0/0</span>
+                            </div>
+                            <div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+                                <div id="quiz-progress-bar" class="bg-indigo-600 dark:bg-indigo-500 h-full rounded-full transition-all duration-300" style="width: 20%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Question Text -->
+                        <h3 id="quiz-question-text" class="font-display font-bold text-lg sm:text-xl text-slate-900 dark:text-white leading-snug">Testo della domanda a risposta multipla?</h3>
+
+                        <!-- Answer options list -->
+                        <div id="quiz-options-list" class="space-y-3">
+                            <!-- Dynamically generated option items -->
+                        </div>
+
+                        <!-- Feedback Box (Success / Error explanation) -->
+                        <div id="quiz-feedback" class="hidden p-4 rounded-2xl border flex items-start gap-3 transition-all">
+                            <div id="quiz-feedback-icon" class="w-6 h-6 rounded-full flex items-center justify-center text-white shrink-0 mt-0.5">
+                                <!-- Dynamic check or x icon -->
+                            </div>
+                            <div class="space-y-1">
+                                <strong id="quiz-feedback-title" class="text-sm font-bold">Corretto!</strong>
+                                <p id="quiz-feedback-explanation" class="text-xs leading-relaxed text-slate-600 dark:text-slate-400">Spiegazione dottrinale della risposta corretta.</p>
+                            </div>
+                        </div>
+
+                        <!-- Next Action Button -->
+                        <div class="flex justify-end pt-2">
+                            <button id="quiz-next-btn" onclick="nextQuizStep()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-lg shadow-indigo-700/20 active:scale-95 disabled:opacity-50 disabled:pointer-events-none transition-all flex items-center gap-1.5" disabled>
+                                Conferma <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- Quiz Score Screen (Hidden by default, shown at the end) -->
+                    <div id="quiz-results-container" class="hidden bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-sm text-center space-y-6 animate-scale-up">
+                        
+                        <div class="w-24 h-24 mx-auto rounded-full bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                            <i data-lucide="check-circle" class="w-12 h-12"></i>
+                        </div>
+
+                        <div class="space-y-2">
+                            <h3 class="font-display font-extrabold text-2xl text-slate-900 dark:text-white">Quiz Completato!</h3>
+                            <p id="quiz-results-motivational" class="text-sm text-slate-500 dark:text-slate-400 font-light max-w-sm mx-auto">Ottimo lavoro! Hai risposto correttamente a tutte le domande.</p>
+                        </div>
+
+                        <!-- Circular/Linear Score Panel -->
+                        <div class="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-6 max-w-xs mx-auto border border-slate-200/50 dark:border-slate-700/50">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">PUNTEGGIO FINALE</div>
+                            <div class="text-4xl font-extrabold font-display text-indigo-600 dark:text-indigo-400" id="quiz-final-score-text">5 / 5</div>
+                            <div class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="quiz-percentage-text">100% Corretto</div>
+                        </div>
+
+                        <!-- Options at the end -->
+                        <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
+                            <button onclick="startQuizMode()" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl text-sm font-semibold active:scale-95 shadow-md shadow-indigo-600/20 transition-all flex items-center justify-center gap-1.5">
+                                <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Riprova Quiz
+                            </button>
+                            <button onclick="exitQuiz()" class="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 px-6 py-3 rounded-xl text-sm font-semibold active:scale-95 transition-all">
+                                Torna alla Lezione
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+    <!-- Data JS files -->
+    <script src="lessonsData.js"></script>
+    <script src="quizData.js"></script>
+    <!-- Frontend Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
